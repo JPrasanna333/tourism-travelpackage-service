@@ -1,7 +1,3 @@
-/**
-
- * 
- */
 package com.travelpackage.model;
 
 import java.time.LocalDateTime;
@@ -25,10 +21,6 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
-/**
- * @author PrasannaJ
- *
- */
 @Getter
 @Setter
 @NoArgsConstructor
@@ -38,7 +30,7 @@ import lombok.ToString;
 public class TravelAgent {
 	@Id
 	@GeneratedValue(generator = "agent_id", strategy = GenerationType.AUTO)
-	@SequenceGenerator(name = "agent_id", sequenceName = "agent_seq",initialValue = 1,allocationSize = 1)
+	@SequenceGenerator(name = "agent_id", sequenceName = "agent_seq", initialValue = 1, allocationSize = 1)
 	private Integer agentId;
 	private String agentName;
 	private String owner;
@@ -50,7 +42,7 @@ public class TravelAgent {
 	private Status status;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JoinColumn(name = "agent_id")// this creates the agent_id column in many side(Package)
+	@JoinColumn(name = "agent_id") // this creates the agent_id column in many side(Package)
 	private Set<TravelPackage> travelPackages;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
