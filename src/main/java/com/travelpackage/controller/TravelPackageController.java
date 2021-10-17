@@ -186,7 +186,7 @@ public class TravelPackageController {
 		return ResponseEntity.ok().body(taskByCategory);
 	}
 
-	@GetMapping("/pacakages/tasks/priority/{priority}")
+	@GetMapping("/packages/tasks/priority/{priority}")
 	ResponseEntity<List<Task>> getByPriority(@PathVariable Priority priority) {
 		HttpHeaders headers = new HttpHeaders();
 		headers.add("desc", "get Task by priority using package service");

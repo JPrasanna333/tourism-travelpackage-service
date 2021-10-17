@@ -9,6 +9,9 @@ import javax.persistence.Enumerated;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -37,23 +40,15 @@ public class Task {
 	@Enumerated(EnumType.STRING)
 	@Column(length = 8)
 	private Status status;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "agent_id")
+	@JsonIgnore
 	private TravelAgent travelAgent;
-	
+
 	@ManyToOne
 	@JoinColumn(name = "package_id")
+	@JsonIgnore
 	private TravelPackage travelPackage;
-
-	@Override
-	public String toString() {
-		return "Task [taskName=" + taskName + ", category=" + category + ", owner=" + owner + ", startDate=" + startDate
-				+ ", endDate=" + endDate + ", duration=" + duration + ", priority=" + priority + ", status=" + status
-				+ "]";
-	}
-	
-	
-	
 
 }

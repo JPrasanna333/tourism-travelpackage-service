@@ -34,14 +34,6 @@ public class Worker {
 	private Availability availabilty;
 	@ManyToOne
 	@JoinColumn(name = "task_id")
-	@JsonIgnore
 	private Task task;
-	@Override
-	public String toString() {
-		return "Worker [workerId=" + workerId + ", workerName=" + workerName + ", type=" + type + ", availabilty="
-				+ availabilty + "]";
-	}
-	
-	
 
 }

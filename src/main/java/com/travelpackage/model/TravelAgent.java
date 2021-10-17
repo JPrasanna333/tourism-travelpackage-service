@@ -40,23 +40,11 @@ public class TravelAgent {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "agent_id") // this creates the agent_id column in many side(Package)
-	@JsonIgnore
 	private Set<TravelPackage> travelPackages;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "agent_id")
 	@JsonIgnore
 	private Set<Task> Tasks;
-
-	@Override
-	public String toString() {
-		return "TravelAgent [agentId=" + agentId + ", agentName=" + agentName + ", owner=" + owner + ", startDate="
-				+ startDate + ", endDate=" + endDate + ", priority=" + priority + ", status=" + status + "]";
-	}
-	
-	
-
-	
-	
 
 }

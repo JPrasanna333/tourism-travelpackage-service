@@ -16,6 +16,8 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,18 +51,11 @@ public class TravelPackage {
 
 	@ManyToOne
 	@JoinColumn(name = "agent_id") // this doesn't creates the column of the instance variable
+	@JsonIgnore
 	private TravelAgent travelAgent;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "package_id")
 	private List<Task> Tasks;
-
-	@Override
-	public String toString() {
-		return "TravelPackage [packageId=" + packageId + ", packageName=" + packageName + ", owner=" + owner
-				+ ", startDate=" + startDate + ", endDate=" + endDate + ", location=" + location + ", priority="
-				+ priority + ", status=" + status + ", travelAgent=" + travelAgent.getAgentId() + ", Tasks=" + Tasks + "]";
-	}
-	
 
 }

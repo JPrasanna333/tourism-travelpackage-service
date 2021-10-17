@@ -22,7 +22,7 @@ import com.travelpackage.repository.ITravelPackageRepository;
 @Service
 public class TravelPackageImpl implements ITravelPackageService {
 
-	public static final String BASEURL = "http://TASK-SERVICE/task-api/";
+	public static final String BASEURL = "http://localhost:8083/task-api/";
 
 	ITravelPackageRepository travelPackageRepository;
 
@@ -44,12 +44,12 @@ public class TravelPackageImpl implements ITravelPackageService {
 
 		String agentUrl = "http://AGENT-SERVICE/agent-api/agents/" + agentId;
 		String taskurl = BASEURL + "/tasks";
-		
+
 		ResponseEntity<TravelAgent> agent = restTemplate.getForEntity(agentUrl, TravelAgent.class);
 		TravelAgent travelAgent = agent.getBody();
-		
+
 		TravelPackage travelPackage = getPackageByid(packageId);
-		
+
 		task.setTravelPackage(travelPackage);
 		task.setTravelAgent(travelAgent);
 
@@ -181,28 +181,28 @@ public class TravelPackageImpl implements ITravelPackageService {
 
 	@Override
 	public List<Task> getTaskByOwner(String owner) {
-		String url = BASEURL + "tasks/task-name/" + owner;
+		String url = BASEURL + "tasks/owner/" + owner;
 		ResponseEntity<List> taskByOwner = restTemplate.getForEntity(url, List.class);
 		return taskByOwner.getBody();
 	}
 
 	@Override
 	public List<Task> getTaskByCategory(String category) {
-		String url = BASEURL + "tasks/task-name/" + category;
+		String url = BASEURL + "tasks/category/" + category;
 		ResponseEntity<List> taskByCategory = restTemplate.getForEntity(url, List.class);
 		return taskByCategory.getBody();
 	}
 
 	@Override
 	public List<Task> getTaskByPriority(Priority priority) {
-		String url = BASEURL + "tasks/task-name/" + priority;
+		String url = BASEURL + "tasks/priority/" + priority;
 		ResponseEntity<List> taskByPriority = restTemplate.getForEntity(url, List.class);
 		return taskByPriority.getBody();
 	}
 
 	@Override
 	public List<Task> getTaskByStatus(Status status) {
-		String url = BASEURL + "tasks/task-name/" + status;
+		String url = BASEURL + "tasks/status/" + status;
 		ResponseEntity<List> taskByStatus = restTemplate.getForEntity(url, List.class);
 		return taskByStatus.getBody();
 	}
