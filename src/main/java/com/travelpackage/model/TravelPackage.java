@@ -56,6 +56,6 @@ public class TravelPackage {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "package_id")
-	private List<Task> Tasks;
+	private List<Task> tasks;
 
 }
