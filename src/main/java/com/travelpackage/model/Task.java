@@ -1,22 +1,14 @@
 package com.travelpackage.model;
 
 import java.time.LocalDateTime;
-import java.util.Set;
 
-import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
-
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -30,9 +22,8 @@ import lombok.ToString;
 @ToString
 @Entity
 public class Task {
+
 	@Id
-	@GeneratedValue(generator = "task_id", strategy = GenerationType.AUTO)
-	@SequenceGenerator(name = "task_id", sequenceName = "task_seq",initialValue = 1,allocationSize = 1)
 	private Integer taskId;
 	private String taskName;
 	private String category;
@@ -54,9 +45,15 @@ public class Task {
 	@ManyToOne
 	@JoinColumn(name = "package_id")
 	private TravelPackage travelPackage;
+
+	@Override
+	public String toString() {
+		return "Task [taskName=" + taskName + ", category=" + category + ", owner=" + owner + ", startDate=" + startDate
+				+ ", endDate=" + endDate + ", duration=" + duration + ", priority=" + priority + ", status=" + status
+				+ "]";
+	}
+	
 	
 	
 
 }
-
-

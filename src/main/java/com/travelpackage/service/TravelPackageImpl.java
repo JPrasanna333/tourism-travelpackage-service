@@ -7,9 +7,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import com.travelpackage.exceptions.TravelPackageNotFoundException;
 import com.travelpackage.model.Priority;
 import com.travelpackage.model.Status;
 import com.travelpackage.model.Task;
+import com.travelpackage.model.TravelAgent;
 import com.travelpackage.model.TravelPackage;
 import com.travelpackage.repository.ITravelPackageRepository;
 
@@ -19,6 +21,9 @@ import com.travelpackage.repository.ITravelPackageRepository;
  */
 @Service
 public class TravelPackageImpl implements ITravelPackageService {
+
+	public static final String BASEURL = "http://TASK-SERVICE/task-api/";
+
 	ITravelPackageRepository travelPackageRepository;
 
 	@Autowired
@@ -33,13 +38,22 @@ public class TravelPackageImpl implements ITravelPackageService {
 		this.restTemplate = restTemplate;
 	}
 
-	public static final String BASEURL = "http://localhost:8083/task-api";
-
 	@Override
 
-	public Task addTask(Task task) {
-		String url = BASEURL + "/tasks";
-		ResponseEntity<Task> addedTask = restTemplate.postForEntity(url, task, Task.class);
+	public Task addTask(Task task, int packageId, int agentId) throws TravelPackageNotFoundException {
+
+		String agentUrl = "http://AGENT-SERVICE/agent-api/agents/" + agentId;
+		String taskurl = BASEURL + "/tasks";
+		
+		ResponseEntity<TravelAgent> agent = restTemplate.getForEntity(agentUrl, TravelAgent.class);
+		TravelAgent travelAgent = agent.getBody();
+		
+		TravelPackage travelPackage = getPackageByid(packageId);
+		
+		task.setTravelPackage(travelPackage);
+		task.setTravelAgent(travelAgent);
+
+		ResponseEntity<Task> addedTask = restTemplate.postForEntity(taskurl, task, Task.class);
 		return addedTask.getBody();
 	}
 
@@ -48,14 +62,13 @@ public class TravelPackageImpl implements ITravelPackageService {
 		String url = BASEURL + "/tasks";
 		restTemplate.put(url, task);
 		return "Task is updated";
-
 	}
 
 	@Override
 	public String deleteTask(Integer taskId) {
 		String url = BASEURL + "/tasks/task-id/" + taskId;
 		restTemplate.delete(url, taskId);
-		return "task is updated";
+		return "task is deleted";
 
 	}
 
@@ -72,7 +85,10 @@ public class TravelPackageImpl implements ITravelPackageService {
 	}
 
 	@Override
-	public void DeleteTravelPackage(int travelPackageId) {
+	public void DeleteTravelPackage(int travelPackageId) throws TravelPackageNotFoundException {
+		if (travelPackageRepository.findById(travelPackageId).get() == null) {
+			throw new TravelPackageNotFoundException("Travel Package is not found with the given id..");
+		}
 		travelPackageRepository.deleteById(travelPackageId);
 
 	}
@@ -83,33 +99,112 @@ public class TravelPackageImpl implements ITravelPackageService {
 	}
 
 	@Override
-	public TravelPackage getPackageByid(int packageId) {
-		return travelPackageRepository.findById(packageId).get();
+	public TravelPackage getPackageByid(int packageId) throws TravelPackageNotFoundException {
+		TravelPackage packageById = travelPackageRepository.findById(packageId).get();
+		if (packageById == null) {
+			throw new TravelPackageNotFoundException("Travel Package is not found with the given id..");
+		}
+		return packageById;
 	}
 
 	@Override
-	public List<TravelPackage> getPackageByLocation(String location) {
-		return travelPackageRepository.findByLocation(location);
+	public List<TravelPackage> getPackageByLocation(String location) throws TravelPackageNotFoundException {
+		List<TravelPackage> packageByLocation = travelPackageRepository.findByLocation(location);
+		if (packageByLocation.isEmpty()) {
+			throw new TravelPackageNotFoundException(
+					"Travel package not found with the given location.Please enter a valid location");
+		}
+		return packageByLocation;
 	}
 
 	@Override
-	public List<TravelPackage> getPackageByPriority(Priority priority) {
-		return travelPackageRepository.findByPriority(priority);
+	public List<TravelPackage> getPackageByPriority(Priority priority) throws TravelPackageNotFoundException {
+		List<TravelPackage> packageByPriority = travelPackageRepository.findByPriority(priority);
+		if (packageByPriority.isEmpty()) {
+			throw new TravelPackageNotFoundException(
+					"Travel package not found with the given priority .Please enter a valid priority");
+		}
+		return packageByPriority;
 	}
 
 	@Override
-	public List<TravelPackage> getPackageByStatus(Status status) {
-		return travelPackageRepository.findByStatus(status);
+	public List<TravelPackage> getPackageByStatus(Status status) throws TravelPackageNotFoundException {
+		List<TravelPackage> packageByStatus = travelPackageRepository.findByStatus(status);
+		if (packageByStatus.isEmpty()) {
+			throw new TravelPackageNotFoundException(
+					"Travel package not found with the given status .Please enter a valid status");
+		}
+		return packageByStatus;
 	}
 
 	@Override
-	public List<TravelPackage> getPackageByName(String name) {
-		return travelPackageRepository.findByPackageName(name);
+	public List<TravelPackage> getPackageByName(String name) throws TravelPackageNotFoundException {
+		List<TravelPackage> packageByName = travelPackageRepository.findByPackageName(name);
+		if (packageByName.isEmpty()) {
+			throw new TravelPackageNotFoundException(
+					"Travel package not found with the given name .Please enter a valid name");
+		}
+		return packageByName;
 	}
 
 	@Override
-	public List<TravelPackage> getPackageByOwner(String owner) {
-		return travelPackageRepository.findByOwner(owner);
+	public List<TravelPackage> getPackageByOwner(String owner) throws TravelPackageNotFoundException {
+		List<TravelPackage> packageByOwner = travelPackageRepository.findByOwner(owner);
+		if (packageByOwner.isEmpty()) {
+			throw new TravelPackageNotFoundException(
+					"Travel package not found with the given owner name .Please enter a valid owner name");
+		}
+		return packageByOwner;
+	}
+
+	@Override
+	public Task getTaskById(int taskId) {
+
+		String url = BASEURL + "tasks/" + taskId;
+		ResponseEntity<Task> taskById = restTemplate.getForEntity(url, Task.class);
+		return taskById.getBody();
+	}
+
+	@Override
+	public List<Task> getAllTask() {
+		String url = BASEURL + "tasks";
+		ResponseEntity<List> taskList = restTemplate.getForEntity(url, List.class);
+		return taskList.getBody();
+	}
+
+	@Override
+	public List<Task> getTaskByName(String taskName) {
+		String url = BASEURL + "tasks/task-name/" + taskName;
+		ResponseEntity<List> taskByName = restTemplate.getForEntity(url, List.class);
+		return taskByName.getBody();
+	}
+
+	@Override
+	public List<Task> getTaskByOwner(String owner) {
+		String url = BASEURL + "tasks/task-name/" + owner;
+		ResponseEntity<List> taskByOwner = restTemplate.getForEntity(url, List.class);
+		return taskByOwner.getBody();
+	}
+
+	@Override
+	public List<Task> getTaskByCategory(String category) {
+		String url = BASEURL + "tasks/task-name/" + category;
+		ResponseEntity<List> taskByCategory = restTemplate.getForEntity(url, List.class);
+		return taskByCategory.getBody();
+	}
+
+	@Override
+	public List<Task> getTaskByPriority(Priority priority) {
+		String url = BASEURL + "tasks/task-name/" + priority;
+		ResponseEntity<List> taskByPriority = restTemplate.getForEntity(url, List.class);
+		return taskByPriority.getBody();
+	}
+
+	@Override
+	public List<Task> getTaskByStatus(Status status) {
+		String url = BASEURL + "tasks/task-name/" + status;
+		ResponseEntity<List> taskByStatus = restTemplate.getForEntity(url, List.class);
+		return taskByStatus.getBody();
 	}
 
 }

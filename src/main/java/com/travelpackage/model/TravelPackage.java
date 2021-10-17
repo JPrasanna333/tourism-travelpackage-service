@@ -1,7 +1,8 @@
 package com.travelpackage.model;
 
 import java.time.LocalDateTime;
-import java.util.Set;
+import java.util.List;
+
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
@@ -14,8 +15,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.SequenceGenerator;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -50,24 +49,18 @@ public class TravelPackage {
 
 	@ManyToOne
 	@JoinColumn(name = "agent_id") // this doesn't creates the column of the instance variable
-	@JsonIgnore
 	private TravelAgent travelAgent;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	@JsonIgnore
 	@JoinColumn(name = "package_id")
-	private Set<Task> Tasks;
+	private List<Task> Tasks;
 
-	public TravelPackage(String packageName, String owner, LocalDateTime startDate, LocalDateTime endDate,
-			String location, Priority priority, Status status) {
-		super();
-		this.packageName = packageName;
-		this.owner = owner;
-		this.startDate = startDate;
-		this.endDate = endDate;
-		this.location = location;
-		this.priority = priority;
-		this.status = status;
+	@Override
+	public String toString() {
+		return "TravelPackage [packageId=" + packageId + ", packageName=" + packageName + ", owner=" + owner
+				+ ", startDate=" + startDate + ", endDate=" + endDate + ", location=" + location + ", priority="
+				+ priority + ", status=" + status + ", travelAgent=" + travelAgent.getAgentId() + ", Tasks=" + Tasks + "]";
 	}
+	
 
 }

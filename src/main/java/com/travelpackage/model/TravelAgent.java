@@ -8,12 +8,11 @@ import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
-import javax.persistence.SequenceGenerator;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,8 +28,6 @@ import lombok.ToString;
 @Entity
 public class TravelAgent {
 	@Id
-	@GeneratedValue(generator = "agent_id", strategy = GenerationType.AUTO)
-	@SequenceGenerator(name = "agent_id", sequenceName = "agent_seq", initialValue = 1, allocationSize = 1)
 	private Integer agentId;
 	private String agentName;
 	private String owner;
@@ -43,10 +40,23 @@ public class TravelAgent {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "agent_id") // this creates the agent_id column in many side(Package)
+	@JsonIgnore
 	private Set<TravelPackage> travelPackages;
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "agent_id")
+	@JsonIgnore
 	private Set<Task> Tasks;
+
+	@Override
+	public String toString() {
+		return "TravelAgent [agentId=" + agentId + ", agentName=" + agentName + ", owner=" + owner + ", startDate="
+				+ startDate + ", endDate=" + endDate + ", priority=" + priority + ", status=" + status + "]";
+	}
+	
+	
+
+	
+	
 
 }

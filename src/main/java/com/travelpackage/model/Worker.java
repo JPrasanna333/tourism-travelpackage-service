@@ -10,6 +10,8 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.SequenceGenerator;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -24,17 +26,22 @@ import lombok.ToString;
 @Entity
 public class Worker {
 	@Id
-	@GeneratedValue(generator = "worker_id", strategy = GenerationType.AUTO)
-	@SequenceGenerator(name = "worker_id", sequenceName = "worker_seq",initialValue = 1,allocationSize = 1)
 	private Integer workerId;
 	private String workerName;
 	@Enumerated(EnumType.STRING)
 	private WorkerType type;
 	@Enumerated(EnumType.STRING)
 	private Availability availabilty;
-	
 	@ManyToOne
-	@JoinColumn(name="task_id")
+	@JoinColumn(name = "task_id")
+	@JsonIgnore
 	private Task task;
+	@Override
+	public String toString() {
+		return "Worker [workerId=" + workerId + ", workerName=" + workerName + ", type=" + type + ", availabilty="
+				+ availabilty + "]";
+	}
+	
+	
 
 }

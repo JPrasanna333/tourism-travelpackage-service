@@ -13,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -37,19 +36,7 @@ public class TravelPackageController {
 		this.travelPackageService = travelPackageService;
 	}
 
-//	@PostMapping("/packages/task")
-//	ResponseEntity<Task> addTask(@RequestBody Task task) {
-//		Task addedTask = travelPackageService.addTask(task);
-//		return ResponseEntity.ok(addedTask);
-//
-//	}
-//
-//	@PutMapping("/packages/task")
-//	ResponseEntity<String> updateTask(@RequestBody Task task) {
-//		String updateTask = travelPackageService.updateTask(task);
-//		return ResponseEntity.ok(updateTask);
-//
-//	}
+	// travel package
 
 	@PostMapping("/packages")
 	ResponseEntity<TravelPackage> addTravelPackage(@RequestBody TravelPackage travelPackage) {
@@ -128,6 +115,7 @@ public class TravelPackageController {
 		return ResponseEntity.ok().headers(headers).body(packageByName);
 
 	}
+
 	@GetMapping("/packages/package-owner/{owner}")
 	ResponseEntity<List<TravelPackage>> getPackageByOwner(@PathVariable String owner) {
 		List<TravelPackage> packageByOwner = travelPackageService.getPackageByOwner(owner);
@@ -137,5 +125,81 @@ public class TravelPackageController {
 
 	}
 
+	// task
+	@PostMapping("/packages/package-id/{packageId}/agents/agent-id/{agentId}/tasks")
+	ResponseEntity<Task> addTask(@RequestBody Task task, @PathVariable int packageId, @PathVariable int agentId) {
+		Task addedTask = travelPackageService.addTask(task, packageId, agentId);
+		return ResponseEntity.ok(addedTask);
+	}
+
+	@PutMapping("/packages/task")
+	ResponseEntity<String> updateTask(@RequestBody Task task) {
+		String updateTask = travelPackageService.updateTask(task);
+		return ResponseEntity.ok(updateTask);
+
+	}
+
+	@DeleteMapping("/packages/{taskId}")
+	ResponseEntity<String> DeleteTask(@PathVariable int taskId) {
+		travelPackageService.deleteTask(taskId);
+		return ResponseEntity.status(HttpStatus.OK).body("deleted succcessfully");
+
+	}
+
+	@GetMapping("/packages/tasks/{taskId}")
+	ResponseEntity<Task> getByTaskId(@PathVariable int taskId) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("desc", "Get task by id using package Service");
+		Task newtask = travelPackageService.getTaskById(taskId);
+		return ResponseEntity.ok().headers(headers).body(newtask);
+	}
+
+	@GetMapping("/packages/tasks")
+	ResponseEntity<List<Task>> getAllTask() {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("desc", "Get all tasks by package service");
+		List<Task> taskList = travelPackageService.getAllTask();
+		return ResponseEntity.ok().body(taskList);
+	}
+
+	@GetMapping("/packages/tasks/task-name/{taskName}")
+	ResponseEntity<List<Task>> getByName(@PathVariable("taskName") String taskName) {
+		List<Task> taskByName = travelPackageService.getTaskByName(taskName);
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("desc", "Get all Task by owner using package service");
+		return ResponseEntity.ok().body(taskByName);
+	}
+
+	@GetMapping("/packages/tasks/owner/{owner}")
+	ResponseEntity<List<Task>> getByOwner(@PathVariable String owner) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("desc", "get task by owner using package");
+		List<Task> taskByOwner = travelPackageService.getTaskByOwner(owner);
+		return ResponseEntity.ok().body(taskByOwner);
+	}
+
+	@GetMapping("/packages/tasks/category/{category}")
+	ResponseEntity<List<Task>> getByCategory(@PathVariable String category) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("desc", "get task by category using package service");
+		List<Task> taskByCategory = travelPackageService.getTaskByCategory(category);
+		return ResponseEntity.ok().body(taskByCategory);
+	}
+
+	@GetMapping("/pacakages/tasks/priority/{priority}")
+	ResponseEntity<List<Task>> getByPriority(@PathVariable Priority priority) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("desc", "get Task by priority using package service");
+		List<Task> taskByPriority = travelPackageService.getTaskByPriority(priority);
+		return ResponseEntity.ok().body(taskByPriority);
+	}
+
+	@GetMapping("/packages/tasks/status/{status}")
+	ResponseEntity<List<Task>> getByStatus(@PathVariable("status") Status status) {
+		HttpHeaders headers = new HttpHeaders();
+		headers.add("desc", "All Tasks are retrieved by status using package service");
+		List<Task> taskList = travelPackageService.getTaskByStatus(status);
+		return ResponseEntity.ok().body(taskList);
+	}
 
 }
