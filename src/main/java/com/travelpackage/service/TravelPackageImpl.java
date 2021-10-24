@@ -85,12 +85,11 @@ public class TravelPackageImpl implements ITravelPackageService {
 	}
 
 	@Override
-	public void DeleteTravelPackage(int travelPackageId) throws TravelPackageNotFoundException {
+	public void deleteTravelPackage(int travelPackageId) throws TravelPackageNotFoundException {
 		if (travelPackageRepository.findById(travelPackageId).get() == null) {
 			throw new TravelPackageNotFoundException("Travel Package is not found with the given id..");
 		}
 		travelPackageRepository.deleteById(travelPackageId);
-
 	}
 
 	@Override

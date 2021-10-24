@@ -65,6 +65,14 @@ public class GlobalExceptionHandler extends ResponseEntityExceptionHandler {
 		ApiErrors apiError = new ApiErrors(timestamp, message, status.value(), error);
 		return ResponseEntity.status(status).body(apiError);
 	}
+	@ExceptionHandler(TravelPackageNotFoundException.class)
+	protected ResponseEntity<Object> handleTaskStatusNotFound(TravelPackageNotFoundException ex) {
+		String message = ex.getMessage();
+		LocalDateTime timeStamp = LocalDateTime.now();
+		String error = "Travel package was not found";
+		ApiErrors errors = new ApiErrors(timeStamp, message, HttpStatus.BAD_REQUEST.value(), error);
+		return ResponseEntity.badRequest().body(errors);
+	}
 
 	@Override
 	protected ResponseEntity<Object> handleTypeMismatch(TypeMismatchException ex, HttpHeaders headers,

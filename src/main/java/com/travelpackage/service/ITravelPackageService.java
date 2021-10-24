@@ -25,7 +25,7 @@ public interface ITravelPackageService {
 
 	public TravelPackage updateTravelPackage(TravelPackage travelPackage);
 
-	public void DeleteTravelPackage(int travelPackageId) ;
+	public void deleteTravelPackage(int travelPackageId) ;
 
 	List<TravelPackage> getAllPackages();
 

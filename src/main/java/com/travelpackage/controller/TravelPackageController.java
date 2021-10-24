@@ -26,6 +26,10 @@ import com.travelpackage.model.Task;
 import com.travelpackage.model.TravelPackage;
 import com.travelpackage.service.ITravelPackageService;
 
+/**
+ * @author PrasannaJ
+ *
+ */
 @RestController
 @RequestMapping("/packages-api")
 public class TravelPackageController {
@@ -57,9 +61,8 @@ public class TravelPackageController {
 	}
 
 	@DeleteMapping("/packages/{packageId}")
-
-	ResponseEntity<String> DeleteTravelPackage(int travelPackageId) {
-		travelPackageService.DeleteTravelPackage(travelPackageId);
+	ResponseEntity<String> deleteTravelPackage(@PathVariable int packageId) {
+		travelPackageService.deleteTravelPackage(packageId);
 		return ResponseEntity.status(HttpStatus.OK).body("deleted succcessfully");
 
 	}
@@ -139,8 +142,8 @@ public class TravelPackageController {
 
 	}
 
-	@DeleteMapping("/packages/{taskId}")
-	ResponseEntity<String> DeleteTask(@PathVariable int taskId) {
+	@DeleteMapping("/packages/task/{taskId}")
+	ResponseEntity<String> deleteTask(@PathVariable int taskId) {
 		travelPackageService.deleteTask(taskId);
 		return ResponseEntity.status(HttpStatus.OK).body("deleted succcessfully");
 
