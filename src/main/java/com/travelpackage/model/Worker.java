@@ -31,7 +31,7 @@ public class Worker {
 	@Enumerated(EnumType.STRING)
 	private WorkerType type;
 	@Enumerated(EnumType.STRING)
-	private Availability availabilty;
+	private Availability availability;
 	@ManyToOne
 	@JoinColumn(name = "task_id")
 	private Task task;

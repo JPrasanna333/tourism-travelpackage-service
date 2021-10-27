@@ -1,7 +1,7 @@
 package com.travelpackage.model;
 
 import java.time.LocalDateTime;
-import java.util.List;
+import java.util.Set;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -56,6 +56,6 @@ public class TravelPackage {
 
 	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
 	@JoinColumn(name = "package_id")
-	private List<Task> tasks;
+	private Set<Task> tasks;
 
 }

@@ -42,14 +42,14 @@ public class TravelPackageImpl implements ITravelPackageService {
 
 	public Task addTask(Task task, int packageId, int agentId) throws TravelPackageNotFoundException {
 
-		String agentUrl = "http://AGENT-SERVICE/agent-api/agents/" + agentId;
+		String agentUrl = "http://localhost:8081/agent-api/agents/" + agentId;
 		String taskurl = BASEURL + "/tasks";
 
 		ResponseEntity<TravelAgent> agent = restTemplate.getForEntity(agentUrl, TravelAgent.class);
 		TravelAgent travelAgent = agent.getBody();
-
+		System.out.println(travelAgent);
 		TravelPackage travelPackage = getPackageByid(packageId);
-
+		System.out.println(travelPackage);
 		task.setTravelPackage(travelPackage);
 		task.setTravelAgent(travelAgent);
 
